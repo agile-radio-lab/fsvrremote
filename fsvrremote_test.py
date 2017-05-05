@@ -14,9 +14,30 @@ class Test:
     f_channels = []
     freq_metric = "MHz"
     time_metric = "s"
+    hdepth = 5000
+    swptime = 0.001
+    
+    @staticmethod
+    def bool_to_str(value):
+        return "ON" if value else "OFF"
+    
+    def set_fspan(self, value):
+        self.f_span = float(value)
+        
+    def set_reflevel(self, value):
+        self.reflevel = float(value)
+        self.write('DISP:TRAC:Y:RLEV ' + str(self.reflevel) + "dBm")  
+    
+    def set_swptime(self, value):
+        self.swptime = float(value)
+        self.write("SWE:TIME " + str(self.swptime) + self.time_metric)
+        
+    def set_hdepth(self, value):
+        self.hdepth = int(value)
+        self.write("CALC3:SGR:HDEP " + str(self.hdepth))
     
     def write(self, cmd):
-        self.inst.write(cmd)
+        self.inst.write(cmd + "\n")
         sleep(1)
     
     def connect(self):
@@ -25,16 +46,20 @@ class Test:
         self.inst.timeout = 5000
         self.f_channels = list(range(2412,2477,5))
         self.f_channels.append(2484)
-        self.write("*IDN?\n")
-        self.write("SYStem:DISPlay:UPDate ON\n")
-        self.write("CALC3:SGR:HDEP 5000")
-
+        self.write("*IDN?")
+        self.write("SYStem:DISPlay:UPDate ON")        
+        self.set_hdepth(self.hdepth)
+        self.set_swptime(self.swptime)
+            
+    def set_f_middle(self, freq):
+        f_start = freq - self.f_span
+        f_end = freq + self.f_span
+        self.write("SENSe:FREQuency:START "+str(f_start)+self.freq_metric)
+        self.write("SENSe:FREQuency:STOP "+str(f_end)+self.freq_metric)
+    
     def set_channel(self, ch):
         f_middle = self.f_channels[ch-1]
-        f_start = f_middle - self.f_span
-        f_end = f_middle + self.f_span
-        self.write("SENSe:FREQuency:START "+str(f_start)+self.freq_metric+"\n")
-        self.write("SENSe:FREQuency:STOP "+str(f_end)+self.freq_metric+"\n")
+        self.set_f_middle(f_middle)
         
     def clear(self, screens=[1,3]):
         for i in screens:
@@ -48,6 +73,11 @@ class Test:
         
 t = Test()
 t.connect()
-t.set_channel(1)
+t.set_f_middle(5540)
+t.set_reflevel(-45)
+t.set_hdepth(10000)
+t.set_fspan(5)
+t.set_swptime(0.00005)
+t.set_channel(9)
 # t.clear()
-# t.store_sgram("C:/trace1test.ASC")
+t.store_sgram("D:/2mbit_ch9.DAT")
