@@ -2,7 +2,7 @@
 """
 Author: Igor Kim
 E-mail: igor.skh@gmail.com
-Repository: https://bitbucket.org/igorkim/fsvrreader
+Repository: https://bitbucket.org/igorkim/fsvrremote
 
 Module for remote controlling of Rohde und Schwarz FSVR
 
