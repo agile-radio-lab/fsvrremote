@@ -12,7 +12,7 @@ April 2017
 from FSVRRemote import FSVRRemote
 
 t = FSVRRemote()
-t.connect()
+t.connect('TCPIP0::mess03.lb02.hft-leipzig.de::inst0::INSTR')
 t.set_f_middle(1815)
 t.set_reflevel(-40)
 t.set_hdepth(10000)

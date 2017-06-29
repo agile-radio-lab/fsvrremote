@@ -44,9 +44,9 @@ class FSVRRemote:
         self.inst.write(cmd + "\n")
         sleep(1)
 
-    def connect(self):
+    def connect(self, device_str):
         rm = pyvisa.ResourceManager()
-        self.inst = rm.open_resource('TCPIP0::mess03.lb02.hft-leipzig.de::inst0::INSTR')
+        self.inst = rm.open_resource(device_str)
         self.inst.timeout = 5000
         self.f_channels = list(range(2412, 2477, 5))
         self.f_channels.append(2484)
