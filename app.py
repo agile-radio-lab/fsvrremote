@@ -12,12 +12,11 @@ April 2017
 from FSVRRemote import FSVRRemote
 
 t = FSVRRemote()
-t.connect('TCPIP0::mess03.lb02.hft-leipzig.de::inst0::INSTR')
+t.connect('TCPIP0::192.168.0.4::inst0::INSTR')
 t.set_f_middle(1815)
 t.set_reflevel(-40)
 t.set_hdepth(10000)
 t.set_fspan(5)
 t.set_swptime(0.00005)
-t.set_channel(9)
-# t.clear()
-t.store_sgram("D:/LTE.DAT")
+t.clear()
+# t.store_sgram("D:/LTE.DAT")

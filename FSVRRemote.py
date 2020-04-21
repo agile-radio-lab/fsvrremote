@@ -2,15 +2,19 @@
 """
 Author: Igor Kim
 E-mail: igor.skh@gmail.com
-Repository: https://bitbucket.org/igorkim/fsvrremote
+Repository: https://github.com/igorskh/fsvrremote
 
 Module for remote controlling of Rohde und Schwarz FSVR
 
-April 2017
+(c) Igor Kim 2017-2020
 """
 
 import pyvisa
 from time import sleep
+
+DEFAULT_TIMEOUT = 5000
+WIFI_CHANNELS = list(range(2412, 2477, 5))
+WIFI_CHANNELS.append(2484)
 
 class FSVRRemote:
     inst = None
@@ -47,9 +51,8 @@ class FSVRRemote:
     def connect(self, device_str):
         rm = pyvisa.ResourceManager()
         self.inst = rm.open_resource(device_str)
-        self.inst.timeout = 5000
-        self.f_channels = list(range(2412, 2477, 5))
-        self.f_channels.append(2484)
+        self.inst.timeout = DEFAULT_TIMEOUT
+        self.f_channels = WIFI_CHANNELS
         self.write("*IDN?")
         self.write("SYStem:DISPlay:UPDate ON")
         self.set_hdepth(self.hdepth)
